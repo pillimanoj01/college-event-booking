@@ -21,7 +21,7 @@ app.use("/api/admin",AdminRoutes)
 
 const main = async()=>{
     await connectDB();
-    app.listen(process.env.PORT,()=>{
+    app.listen(process.env.POST,()=>{
     console.log("Sever started !");
 })
 }
