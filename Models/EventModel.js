@@ -89,6 +89,9 @@ const EventSchema= new mongoose.Schema({
     posterUrl:{
         type:String,
     },
+    posterId:{
+        type:String
+    },
 
     createdAt:{
         type: Date, default: Date.now 

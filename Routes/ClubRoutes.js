@@ -10,9 +10,9 @@ const router=express.Router();
 
 router.post("/event",AuthMiddleware,roleMiddleware(["Club"]),upload.single("poster"),postEvent)
 
-router.put("/event/:id",updateEvent)
+router.put("/event/:eventId",AuthMiddleware,roleMiddleware(["Club"]),upload.single("poster"),updateEvent)
 
-router.delete("/evnet/:id",deleteEvent)
+router.delete("/event/:eventId",AuthMiddleware,roleMiddleware(["Club"]),deleteEvent)
 
 router.get("/events/active",getActiveClubEvents)
 
