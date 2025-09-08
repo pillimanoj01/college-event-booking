@@ -1,6 +1,6 @@
 
 const registerEevent=(req,res)=>{
-
+    
 }
 
 const getRegisteredEvents=(req,res)=>{

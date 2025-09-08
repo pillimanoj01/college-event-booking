@@ -5,7 +5,7 @@ const {registerEevent,getRegisteredEvent,getRegisteredEvents} =require("../Contr
 const router=express.Router();
 
 
-router.post("/register/:id",registerEevent)
+router.post("/register/:eventId",registerEevent)
 
 router.get("/registered-events",getRegisteredEvents)
 
