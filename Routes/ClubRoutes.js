@@ -14,13 +14,13 @@ router.put("/event/:eventId",AuthMiddleware,roleMiddleware(["Club"]),upload.sing
 
 router.delete("/event/:eventId",AuthMiddleware,roleMiddleware(["Club"]),deleteEvent)
 
-router.get("/events/active",getActiveClubEvents)
+router.get("/events/active",AuthMiddleware,roleMiddleware(["Club"]),getActiveClubEvents)
 
-router.get("/events/active/:id",getActiveClubEvent)
+router.get("/events/active/:eventId",AuthMiddleware,roleMiddleware(["Club"]),getActiveClubEvent)
 
-router.get("/events/previous",getPreviousEvents)
+router.get("/events/previous",AuthMiddleware,roleMiddleware(["Club"]),getPreviousEvents)
 
-router.get("/events/previous/:id",getPreviousEvent)
+router.get("/events/previous/:eventId",AuthMiddleware,roleMiddleware(["Club"]),getPreviousEvent)
 
 
 

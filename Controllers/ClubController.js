@@ -1,6 +1,8 @@
-const cloudinary=require("../config/cloudinary")
+const { date } = require("zod");
+const cloudinary=require("../config/cloudinary");
 const Event = require("../Models/EventModel")
-const User=require("../Models/userModel")
+const User=require("../Models/userModel");
+const RegistrationModel = require("../Models/RegistrationModel");
 
 
 
@@ -52,7 +54,8 @@ const postEvent=async(req,res)=>{
             posterId:result.public_id
         })
         if(registrationType==="team"){
-            newEvent.teamSize=teamSize;
+            const {teamSize}=req.body;
+            newEvent.teamSize=parseInt(teamSize);
         }
         if(eventType==="multi-day"){
             newEvent.evnetStartDate=evnetStartDate
@@ -182,20 +185,87 @@ const deleteEvent=async(req,res)=>{
     }
 }
 
-const getActiveClubEvents=(req,res)=>{
+const getActiveClubEvents=async(req,res)=>{
+    try {
+        const today=new Date();
+        const userId=req.userId;
+        const activeEvents= await Event.find({createdBy:userId,date:{$gte:today}})
+        if(!activeEvents){
+            res.status(404).json({
+            message: "no active events!"
+            })
+        }
+        res.status(200).json({
+            activeEvents
+        })
+    } catch (error) {
+        console.log(error);
+            res.status(500).json({
+                Error:"Something went wrong"
+            })
+    }
+}
+
+const getActiveClubEvent=async(req,res)=>{
+    try {
+        const {eventId}=req.params;
+
+        const event = await Event.findById(eventId);
+
+        const registrations = await RegistrationModel.find({event:eventId}).populate("student").populate("team.teamLeader").populate("team.teamMembers");
+
+        res.status(200).json({
+            event,
+            registrations
+        })
+    } catch (error) {
+         console.log(error);
+            res.status(500).json({
+                Error:"Something went wrong"
+            })
+    }
+}
+
+const getPreviousEvents=async(req,res)=>{
+    try {
+        const today=new Date();
+        const userId=req.userId;
+        const previousEvents= await Event.find({createdBy:userId,date:{$lt:today}})
+        if(!previousEvents){
+            res.status(404).json({
+            message: "no active events!"
+            })
+        }
+        res.status(200).json({
+            previousEvents
+        })
+    } catch (error) {
+        console.log(error);
+            res.status(500).json({
+                Error:"Something went wrong"
+            })
+    }
 
 }
 
-const getActiveClubEvent=(req,res)=>{
+const getPreviousEvent=async(req,res)=>{
+     try {
+        const {eventId}=req.params;
 
-}
+        const event = await Event.findById(eventId);
 
-const getPreviousEvents=(req,res)=>{
+        const registrations = await RegistrationModel.find({event:eventId}).populate("student").populate("team.teamLeader").populate("team.teamMembers");
 
-}
-
-const getPreviousEvent=(req,res)=>{
-
+        res.status(200).json({
+            event,
+            registrations
+        })
+    } catch (error) {
+         console.log(error);
+            res.status(500).json({
+                Error:"Something went wrong"
+            })
+    }
 }
 
 module.exports= {postEvent,updateEvent,deleteEvent,getActiveClubEvents,getActiveClubEvent,getPreviousEvents,getPreviousEvent}
