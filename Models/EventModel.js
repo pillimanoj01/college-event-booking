@@ -1,3 +1,4 @@
+const { type } = require("express/lib/response");
 const mongoose=require("mongoose");
 
 
@@ -91,6 +92,11 @@ const EventSchema= new mongoose.Schema({
     },
     posterId:{
         type:String
+    },
+
+    openToRegister:{
+        type:Boolean,
+        required:true
     },
 
     createdAt:{
