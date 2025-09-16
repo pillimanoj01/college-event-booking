@@ -9,7 +9,7 @@ const RegistrationModel = require("../Models/RegistrationModel");
 const postEvent=async(req,res)=>{
      console.log("route hitted");
     try{
-        const { title, description, registrationFee,category,registrationType,date, venue,eventType,startTime,endTime} = req.body;
+        const { title, description, registrationFee,category,registrationType,date, venue,eventType,startTime,endTime,openToRegister} = req.body;
         if(registrationType==="team"){
             const {teamSize}=req.body;
         }
@@ -51,7 +51,8 @@ const postEvent=async(req,res)=>{
             status:"pending",
             createdBy:club._id,
             posterUrl:result.secure_url,
-            posterId:result.public_id
+            posterId:result.public_id,
+            openToRegister:openToRegister
         })
         if(registrationType==="team"){
             const {teamSize}=req.body;
@@ -75,7 +76,7 @@ const postEvent=async(req,res)=>{
 const updateEvent=async(req,res)=>{
         try{
             const {eventId}=req.params;
-            const { title, description, registrationFee,category,registrationType,date, venue,eventType,startTime,endTime,teamSize,evnetStartDate,evnetEndDate} = req.body;
+            const { title, description, registrationFee,category,registrationType,date, venue,eventType,startTime,endTime,teamSize,evnetStartDate,evnetEndDate,openToRegister} = req.body;
 
             const event = await Event.findById(eventId);
             
@@ -124,6 +125,7 @@ const updateEvent=async(req,res)=>{
             if (eventType) event.eventType = eventType;
             if (startTime) event.startTime = startTime;
             if (endTime) event.endTime = endTime;
+            if(openToRegister) event.openToRegister=openToRegister
 
             if (registrationType === "team" && teamSize) {
                 event.teamSize = teamSize;
@@ -156,8 +158,6 @@ const deleteEvent=async(req,res)=>{
         const event = await Event.findById(eventId)
 
         if(!event.createdBy.equals(user._id)){
-                console.log(event.createdBy);
-                console.log(user._id);
                 return res.status(403).json({ error: "Not authorized to update this event" });
 
         }

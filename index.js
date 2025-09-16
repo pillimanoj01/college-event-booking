@@ -5,6 +5,7 @@ const AuthRoutes=require("./Routes/AuthRoutes.js")
 const StudentRoutes=require("./Routes/StudentRoutes.js")
 const ClubRoutes=require("./Routes/ClubRoutes.js")
 const AdminRoutes=require("./Routes/AdminRoutes.js")
+const GenericRoutes=require("./Routes/GenericRoutes.js")
 const cors = require("cors");
 
 const app=express();
@@ -16,6 +17,7 @@ app.use("/api/auth",AuthRoutes)
 app.use("/api/student",StudentRoutes)
 app.use("/api/club",ClubRoutes)
 app.use("/api/admin",AdminRoutes)
+app.use("/api",GenericRoutes)
 
 
 
